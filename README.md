@@ -1,4 +1,4 @@
 # Algorithm-js
 
 
-Compilation of common asked algorithm question solved in JavaScript 
+Compilation of common asked algorithm questions solved in JavaScript 
