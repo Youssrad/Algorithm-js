@@ -17,44 +17,54 @@
 
 
 function findSmallestBalanced(str) {
-    const charMap = {};
-    let minChar = '';
-   
-    // Map string {a: 1} key ==> char, value: number of occurence (case insensitive)
-   str.toLowerCase().split('').forEach(char => {
-        if(charMap[char]) {
-            charMap[char]++;
+    const lowerMap = {}; // Map only lowercase
+    const upperMap = {}; // Map only upperCase
+    const strMap = {}; // Map whole String
+    const minChar = []; // non duplicated char to remove
+
+
+    // Map the whole string
+    str.toLowerCase().split('').forEach(char => {
+        strMap[char] ? strMap[char]++ : strMap[char] = 1; 
+    })
+
+    // Find non duplicated and remove from map
+    for (let char in strMap) {
+        if(strMap[char] === 1) {
+            minChar.push(char); 
+            delete strMap[char];
+        }
+    }
+
+    // clean Str from non duplicated
+
+    const clean = str.split('').filter(char => !minChar.includes(char));
+
+    clean.forEach(char => {
+        char === char.toLowerCase() ? 
+        lowerMap[char]++ || (lowerMap[char] = 1) 
+        : upperMap[char]++ || (upperMap[char] = 1); 
+    })
+
+
+    // check if keys match when lowerCase
+
+    const upperKeys = Object.keys(upperMap).map(key => key.toLowerCase()).join('');
+    const lowerKeys = Object.keys(lowerMap).join('');
+
+
+    if(upperKeys === lowerKeys){
+        const windowstr = [...new Set(clean)].join('');
+
+        const windowMap = {};
+        [...new Set(windowstr.split(''))].forEach(char => {
+        if(windowMap[char]) {
+            windowMap[char]++;
         } else {
-            charMap[char] = 1;
+            windowMap[char] = 1;
         }
-    });
-    // remove non duplicated char from map 
-    for (let char in charMap) {
-        if(charMap[char] === 1) {
-            minChar = char; 
-            delete charMap[char]
-        }
-    }
-
-    console.log(charMap);
-    
-    // Substring we want to find in the given str
-    const windowstr = [...new Set(str.replace(minChar, ''))].join('')
-    console.log(windowstr);
-
-    // New Window map of duplicates both uppercase and lowercase
-    const windowMap = {};
-    [...new Set(str.replace(minChar, '').split(''))].forEach(char => {
-    if(windowMap[char]) {
-        windowMap[char]++;
-    } else {
-        windowMap[char] = 1;
-    }
-   });
-
-   console.log(windowMap)
-
-   // FINDING THE Substring
+       });
+        // FINDING THE Substring
 
    let charCount = windowstr.length; 
    let startIndex = 0; 
@@ -65,30 +75,32 @@ function findSmallestBalanced(str) {
    let j = 0
 
    while(i <= str.length) {
-       // first pointer
-       // windowMap[str[j]] is the number of char left for char 1st pointer
-       if(windowMap[str[i]] > 0) charCount--;
-       windowMap[str[i]]--;
-       i++;
+            // first pointer
+            // windowMap[str[j]] is the number of char left for char 1st pointer
+            if(windowMap[str[i]] > 0) charCount--;
+            windowMap[str[i]]--;
+            i++;
 
-       // second pointer
-       while(charCount === 0){
-           // check if min window < min length
-           if((i - j) < minLength) {
-               minLength = i - j;
-               startIndex = j;
-           }
+            // second pointer
+            while(charCount === 0){
+                // check if min window < min length
+                if((i - j) < minLength) {
+                    minLength = i - j;
+                    startIndex = j;
+                }
 
-           windowMap[str[j]]++;
-           if(windowMap[str[j]] > 0) charCount ++;
-           j++;
-       }
-
+                windowMap[str[j]]++;
+                if(windowMap[str[j]] > 0) charCount ++;
+                j++;
+            }
    }
 
-   return minLength === Number.MAX_VALUE ? -1 : str.substr(startIndex, minLength);
+        return minLength === Number.MAX_VALUE ? -1 : str.substr(startIndex, minLength);
+
+    } else return -1; 
+   
 }
 
-const output = findSmallestBalanced('Technocat');
+const output = findSmallestBalanced('azABaabba');
 
 console.log(output);
