@@ -30,20 +30,19 @@
 
 
 
-// function solution(A) {
-//     let x = 1
-    
-// A.filter(x => x >= 1)
-//  .sort((a, b) => a - b)
-//  .map((val, i, arr) => {
-//     if(x < arr[i]) return
-//     x = arr[i] + 1
-// })
+function solution(A) {
+    let x = 1
+        
+    A.filter(x => x >= 1)
+    .sort((a, b) => a - b)
+    .map((val, i, arr) => {
+        if(x < arr[i]) return
+        x = arr[i] + 1
+    })
 
-// return x
-// }
+    return x
+}
 
 
-// 2 cat --> 8 leg & 1 person --> 2 leg
 
 
